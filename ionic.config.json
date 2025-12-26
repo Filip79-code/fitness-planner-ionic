@@ -1,0 +1,7 @@
+{
+  "name": "fitness-planner",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
