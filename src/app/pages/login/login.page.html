@@ -1,0 +1,49 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Login</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <div class="login-container">
+
+    <ion-icon name="fitness-outline" class="login-icon"></ion-icon>
+
+    <h2>Welcome back</h2>
+    <p>Please sign in to continue</p>
+
+    <ion-item>
+      <ion-label position="floating">Email</ion-label>
+      <ion-input
+        type="email"
+        [(ngModel)]="email">
+      </ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Password</ion-label>
+      <ion-input
+        type="password"
+        [(ngModel)]="password">
+      </ion-input>
+    </ion-item>
+
+    <ion-button
+      expand="block"
+      color="primary"
+      class="login-btn"
+      (click)="login()">
+      Login
+    </ion-button>
+
+    <ion-button
+      expand="block"
+      fill="clear"
+      routerLink="/register">
+      Create new account
+    </ion-button>
+
+  </div>
+
+</ion-content>

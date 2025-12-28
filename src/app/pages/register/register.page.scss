@@ -1,0 +1,29 @@
+.register-container {
+  max-width: 400px;
+  margin: auto;
+  margin-top: 10%;
+  text-align: center;
+}
+
+.register-icon {
+  font-size: 80px;
+  color: var(--ion-color-primary);
+  margin-bottom: 20px;
+}
+
+h2 {
+  margin-bottom: 5px;
+}
+
+p {
+  margin-bottom: 25px;
+  color: gray;
+}
+
+ion-item {
+  margin-bottom: 15px;
+}
+
+.register-btn {
+  margin-top: 20px;
+}

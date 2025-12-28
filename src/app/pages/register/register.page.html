@@ -1,0 +1,65 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Register</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <div class="register-container">
+
+    <ion-icon name="person-add-outline" class="register-icon"></ion-icon>
+
+    <h2>Create Account</h2>
+    <p>Fill in the form to get started</p>
+
+    <ion-item>
+      <ion-label position="floating">Full name</ion-label>
+      <ion-input
+        type="text"
+        [(ngModel)]="name">
+      </ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Email</ion-label>
+      <ion-input
+        type="email"
+        [(ngModel)]="email">
+      </ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Password</ion-label>
+      <ion-input
+        type="password"
+        [(ngModel)]="password">
+      </ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Confirm password</ion-label>
+      <ion-input
+        type="password"
+        [(ngModel)]="confirmPassword">
+      </ion-input>
+    </ion-item>
+
+    <ion-button
+      expand="block"
+      color="primary"
+      class="register-btn"
+      (click)="register()">
+      Register
+    </ion-button>
+
+    <ion-button
+      expand="block"
+      fill="clear"
+      routerLink="/login">
+      Already have an account? Login
+    </ion-button>
+
+  </div>
+
+</ion-content>
