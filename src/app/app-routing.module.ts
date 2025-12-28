@@ -23,6 +23,10 @@ const routes: Routes = [
     path: 'dashboard',
     loadChildren: () => import('./pages/dashboard/dashboard.module').then( m => m.DashboardPageModule)
   },
+  {
+    path: 'workout-schedule',
+    loadChildren: () => import('./pages/workout-schedule/workout-schedule.module').then( m => m.WorkoutSchedulePageModule)
+  },
   
 ];
 

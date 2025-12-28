@@ -1,0 +1,97 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Workout Schedule</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <!-- Form for creating workout -->
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Create Workout</ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+
+      <!-- Workout Name -->
+      <ion-item>
+        <ion-label position="stacked">Workout Name</ion-label>
+        <ion-input [(ngModel)]="workoutName" placeholder="Enter workout name"></ion-input>
+      </ion-item>
+
+      <!-- Day of Week -->
+      <ion-item>
+        <ion-label>Day of Week</ion-label>
+        <ion-select [(ngModel)]="selectedDay">
+          <ion-select-option *ngFor="let day of daysOfWeek" [value]="day">{{ day }}</ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <!-- Duration -->
+      <ion-item>
+        <ion-label position="stacked">Duration (minutes)</ion-label>
+        <ion-input type="number" [(ngModel)]="duration"></ion-input>
+      </ion-item>
+
+      <!-- Date Created with calendar icon -->
+      <ion-item>
+  <ion-label position="stacked" style="margin-bottom: 5px;">Date Created</ion-label>
+  <input
+    type="date"
+    [(ngModel)]="dateCreated"
+    required
+    class="ion-input"
+  />
+</ion-item>
+
+
+
+      <!-- Exercises -->
+      <ion-item>
+        <ion-label>Exercises</ion-label>
+        <ion-select [(ngModel)]="selectedExercises" multiple="true" okText="Select" cancelText="Cancel">
+          <ion-select-option *ngFor="let ex of exercises" [value]="ex">{{ ex.name }}</ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <!-- Add button -->
+      <ion-button expand="block" color="secondary" class="ion-margin-top" (click)="addWorkout()">Add Workout</ion-button>
+
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Filter by day -->
+  <ion-card class="ion-margin-top">
+    <ion-card-header>
+      <ion-card-title>View Workouts by Day</ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+
+      <!-- Scrollable segment for mobile -->
+      <ion-segment [(ngModel)]="selectedDayFilter" scrollable="true">
+        <ion-segment-button *ngFor="let day of daysOfWeek" [value]="day">
+          {{ day }}
+        </ion-segment-button>
+      </ion-segment>
+
+      <!-- Workout list -->
+      <ion-list *ngFor="let workout of getWorkoutsForSelectedDay()">
+        <ion-item-divider color="light">
+          <ion-label>{{ workout.name }} - {{ workout.duration }} min</ion-label>
+        </ion-item-divider>
+
+        <ion-item *ngFor="let ex of workout.exercises">
+          <ion-label>{{ ex.name }}</ion-label>
+        </ion-item>
+      </ion-list>
+
+      <p *ngIf="getWorkoutsForSelectedDay().length === 0" class="ion-padding">
+        No workouts for {{ selectedDayFilter }}.
+      </p>
+
+    </ion-card-content>
+  </ion-card>
+
+</ion-content>
