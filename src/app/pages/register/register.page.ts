@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-register',
@@ -13,20 +15,34 @@ export class RegisterPage implements OnInit {
   password: string = '';
   confirmPassword: string = '';
 
-  constructor() { }
+  constructor(private authService: AuthService, private router: Router) { }
 
   ngOnInit() {
   }
 
   register() {
-    if (this.password !== this.confirmPassword) {
-      alert('Passwords do not match');
+    if (!this.email || !this.password || !this.confirmPassword) {
+      alert('Popunite sva polja!');
       return;
     }
 
-    console.log('Name:', this.name);
-    console.log('Email:', this.email);
-    console.log('Password:', this.password);
+    if (this.password !== this.confirmPassword) {
+      alert('Lozinka i potvrda lozinke se ne poklapaju!');
+      return;
+    }
+
+    // Poziv AuthService da doda korisnika u Firebase
+    this.authService.register({ email: this.email, password: this.password, name: this.name })
+      .subscribe({
+        next: () => {
+          alert('Uspešno registrovan korisnik!');
+          this.router.navigate(['/login']); // preusmeravanje na login
+        },
+        error: (err) => {
+          console.error(err);
+          alert('Došlo je do greške prilikom registracije!');
+        }
+      });
   }
 
 }

@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
+import { AuthGuard } from './guards/auth-guard';
 
 const routes: Routes = [
   {
@@ -21,15 +22,18 @@ const routes: Routes = [
   },
   {
     path: 'dashboard',
-    loadChildren: () => import('./pages/dashboard/dashboard.module').then( m => m.DashboardPageModule)
+    loadChildren: () => import('./pages/dashboard/dashboard.module').then( m => m.DashboardPageModule),
+    canActivate: [AuthGuard]
   },
   {
     path: 'workout-schedule',
-    loadChildren: () => import('./pages/workout-schedule/workout-schedule.module').then( m => m.WorkoutSchedulePageModule)
+    loadChildren: () => import('./pages/workout-schedule/workout-schedule.module').then( m => m.WorkoutSchedulePageModule),
+    canActivate: [AuthGuard]
   },
   {
     path: 'track-nutrition',
-    loadChildren: () => import('./pages/track-nutrition/track-nutrition.module').then( m => m.TrackNutritionPageModule)
+    loadChildren: () => import('./pages/track-nutrition/track-nutrition.module').then( m => m.TrackNutritionPageModule),
+    canActivate: [AuthGuard]
   },
   
 ];
