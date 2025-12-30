@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthService } from '../../services/auth.service';
 
 interface Exercise {
   id: number;
@@ -42,7 +43,7 @@ export class WorkoutSchedulePage implements OnInit {
 
   selectedDayFilter: string = 'Monday';
 
-  constructor() { }
+  constructor(private authService: AuthService) { }
 
   ngOnInit() {
   }
@@ -75,6 +76,10 @@ export class WorkoutSchedulePage implements OnInit {
   // Filter workouts by day
   getWorkoutsForSelectedDay(): Workout[] {
     return this.workouts.filter(w => w.day === this.selectedDayFilter);
+  }
+
+  logout() {
+    this.authService.logout();
   }
 
 }

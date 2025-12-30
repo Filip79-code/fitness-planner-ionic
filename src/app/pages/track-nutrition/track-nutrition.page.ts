@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthService } from '../../services/auth.service';
 
 
 interface Meal {
@@ -29,10 +30,11 @@ export class TrackNutritionPage implements OnInit {
 
   selectedDate: string = '';
 
-  constructor() { }
+  constructor(private authService: AuthService) { }
 
   ngOnInit() {
   }
+
 
   addMeal() {
     if (!this.mealName || !this.calories || !this.mealDate) {
@@ -64,6 +66,10 @@ export class TrackNutritionPage implements OnInit {
   getTotalCalories(): number {
     return this.getMealsForSelectedDate()
       .reduce((sum, meal) => sum + meal.calories, 0);
+  }
+
+  logout() {
+    this.authService.logout();
   }
 
 }

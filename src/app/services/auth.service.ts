@@ -1,0 +1,23 @@
+import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class AuthService {
+
+  constructor(private router: Router) {}
+
+  logout() {
+    // obriši auth podatke
+    localStorage.removeItem('user');
+    localStorage.removeItem('token');
+
+    // preusmeri na login
+    this.router.navigate(['/login']);
+  }
+
+  isLoggedIn(): boolean {
+    return !!localStorage.getItem('user');
+  }
+}

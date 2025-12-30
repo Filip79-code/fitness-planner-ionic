@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -35,9 +36,13 @@ export class DashboardPage implements OnInit {
     return this.meals.reduce((sum, meal) => sum + meal.calories, 0);
   }
 
-  constructor() { }
+  constructor(private authService: AuthService) { }
 
   ngOnInit() {
+  }
+
+  logout() {
+    this.authService.logout();
   }
 
 }
