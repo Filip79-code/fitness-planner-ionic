@@ -27,6 +27,10 @@ const routes: Routes = [
     path: 'workout-schedule',
     loadChildren: () => import('./pages/workout-schedule/workout-schedule.module').then( m => m.WorkoutSchedulePageModule)
   },
+  {
+    path: 'track-nutrition',
+    loadChildren: () => import('./pages/track-nutrition/track-nutrition.module').then( m => m.TrackNutritionPageModule)
+  },
   
 ];
 

@@ -1,0 +1,108 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Track Nutrition</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <!-- Add meal form -->
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Add Meal</ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+
+      <ion-item>
+        <ion-label position="stacked" style="margin-bottom: 6px;">Meal Name</ion-label>
+        <ion-input [(ngModel)]="mealName" placeholder="e.g. Breakfast"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked" style="margin-bottom: 6px;">Calories</ion-label>
+        <ion-input type="number" [(ngModel)]="calories"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked" style="margin-bottom: 6px;">Protein (g)</ion-label>
+        <ion-input type="number" [(ngModel)]="protein"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked" style="margin-bottom: 6px;">Carbs (g)</ion-label>
+        <ion-input type="number" [(ngModel)]="carbs"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked" style="margin-bottom: 6px;">Fats (g)</ion-label>
+        <ion-input type="number" [(ngModel)]="fats"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked" style="margin-bottom: 6px;">Date</ion-label>
+        <input
+          type="date"
+          [(ngModel)]="mealDate"
+          required
+          class="ion-input"
+        />
+      </ion-item>
+
+      <ion-button
+        expand="block"
+        color="secondary"
+        class="ion-margin-top"
+        (click)="addMeal()"
+      >
+        Add Meal
+      </ion-button>
+
+    </ion-card-content>
+  </ion-card>
+
+  <!-- View meals by date -->
+  <ion-card class="ion-margin-top">
+    <ion-card-header>
+      <ion-card-title>Meals by Date</ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+
+      <ion-item>
+        <ion-label>Date</ion-label>
+        <input
+          type="date"
+          [(ngModel)]="selectedDate"
+          class="ion-input"
+        />
+      </ion-item>
+
+      <ion-list *ngIf="getMealsForSelectedDate().length > 0">
+        <ion-item *ngFor="let meal of getMealsForSelectedDate()">
+          <ion-label>
+            <h2>{{ meal.name }}</h2>
+            <p>
+              {{ meal.calories }} kcal |
+              P: {{ meal.protein }}g |
+              C: {{ meal.carbs }}g |
+              F: {{ meal.fats }}g
+            </p>
+          </ion-label>
+        </ion-item>
+      </ion-list>
+
+      <p *ngIf="getMealsForSelectedDate().length === 0" class="ion-padding">
+        No meals for selected date.
+      </p>
+
+      <ion-item-divider color="light" *ngIf="getMealsForSelectedDate().length > 0">
+        <ion-label>
+          Total calories: <strong>{{ getTotalCalories() }} kcal</strong>
+        </ion-label>
+      </ion-item-divider>
+
+    </ion-card-content>
+  </ion-card>
+
+</ion-content>
