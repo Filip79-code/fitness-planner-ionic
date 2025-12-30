@@ -7,13 +7,15 @@ import { IonicModule } from '@ionic/angular';
 import { TrackNutritionPageRoutingModule } from './track-nutrition-routing.module';
 
 import { TrackNutritionPage } from './track-nutrition.page';
+import { NavbarModule } from '../../components/navbar/navbar.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    TrackNutritionPageRoutingModule
+    TrackNutritionPageRoutingModule,
+    NavbarModule
   ],
   declarations: [TrackNutritionPage]
 })

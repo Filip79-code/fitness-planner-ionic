@@ -7,13 +7,15 @@ import { IonicModule } from '@ionic/angular';
 import { WorkoutSchedulePageRoutingModule } from './workout-schedule-routing.module';
 
 import { WorkoutSchedulePage } from './workout-schedule.page';
+import { NavbarModule } from '../../components/navbar/navbar.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    WorkoutSchedulePageRoutingModule
+    WorkoutSchedulePageRoutingModule,
+    NavbarModule
   ],
   declarations: [WorkoutSchedulePage]
 })
