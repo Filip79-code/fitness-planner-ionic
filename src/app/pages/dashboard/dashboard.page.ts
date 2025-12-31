@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
+import { FirebaseService } from '../../services/firebase.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -13,32 +14,39 @@ export class DashboardPage implements OnInit {
 
   
 
-  meals = [
-    {
-      name: 'Breakfast',
-      calories: 450
-    },
-    {
-      name: 'Lunch',
-      calories: 650
-    },
-    {
-      name: 'Dinner',
-      calories: 550
-    },
-    {
-      name: 'Snack',
-      calories: 200
-    }
-  ];
+  meals: any[] = [];
+
+  userId!: string;
 
   get totalCalories(): number {
     return this.meals.reduce((sum, meal) => sum + meal.calories, 0);
   }
 
-  constructor(private authService: AuthService) { }
+  constructor(private authService: AuthService, private firebaseService: FirebaseService) { }
 
   ngOnInit() {
+    this.userId = this.authService.getUserId()!;
+    this.loadMealsForDate(this.selectedDate);
+  }
+
+  onDateChange(event: any) {
+    this.selectedDate = event.detail.value;
+    this.loadMealsForDate(this.selectedDate);
+  }
+
+  loadMealsForDate(date: string) {
+    const formattedDate = date.split('T')[0];
+
+    this.firebaseService.getMeals(this.userId).subscribe((res: any) => {
+      if (!res) {
+        this.meals = [];
+        return;
+      }
+
+      this.meals = Object.values(res).filter(
+        (meal: any) => meal.date === formattedDate
+      );
+    });
   }
 
   logout() {

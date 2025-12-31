@@ -42,12 +42,17 @@ getWorkouts(userId: string): Observable<{ [key: string]: any }> {
 
   // ---------- ISHRANA / OBROCI ----------
   // Dodavanje obroka
-  addMeal(meal: any): Observable<any> {
-    return this.http.post(`${this.baseUrl}/meals.json`, meal);
-  }
+  addMeal(userId: string, meal: any): Observable<{ name: string }> {
+  return this.http.post<{ name: string }>(
+    `${this.baseUrl}/meals/${userId}.json`,
+    meal
+  );
+}
 
   // Dohvatanje svih obroka
-  getMeals(): Observable<any> {
-    return this.http.get(`${this.baseUrl}/meals.json`);
-  }
+  getMeals(userId: string): Observable<{ [key: string]: any }> {
+  return this.http.get<{ [key: string]: any }>(
+    `${this.baseUrl}/meals/${userId}.json`
+  );
+}
 }

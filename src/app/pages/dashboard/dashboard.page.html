@@ -50,9 +50,11 @@
   <ion-item lines="none" class="ion-margin-top">
     <ion-label position="stacked">Selected date</ion-label>
     <ion-datetime
-      presentation="date"
-      [(ngModel)]="selectedDate">
-    </ion-datetime>
+  presentation="date"
+  [(ngModel)]="selectedDate"
+  (ionChange)="onDateChange($event)">
+</ion-datetime>
+
   </ion-item>
 
   <!-- Meals -->
