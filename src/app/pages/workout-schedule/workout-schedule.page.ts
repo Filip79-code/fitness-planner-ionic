@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
+import { FirebaseService } from '../../services/firebase.service';
+
 
 interface Exercise {
   id: number;
@@ -7,13 +9,13 @@ interface Exercise {
 }
 
 interface Workout {
+  id?: string;       // Firebase ID
   name: string;
   day: string;
   duration: number;
   dateCreated: string;
   exercises: Exercise[];
 }
-
 
 @Component({
   selector: 'app-workout-schedule',
@@ -23,7 +25,11 @@ interface Workout {
 })
 export class WorkoutSchedulePage implements OnInit {
 
-    workoutName: string = '';
+  userId!: string;
+
+  workouts: Workout[] = [];
+
+  workoutName: string = '';
   selectedDay: string = 'Monday';
   duration: number | null = null;
   dateCreated: string = new Date().toISOString().split('T')[0];
@@ -37,19 +43,28 @@ export class WorkoutSchedulePage implements OnInit {
     { id: 5, name: 'Plank' }
   ];
 
-  workouts: Workout[] = [];
-
   daysOfWeek: string[] = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-
   selectedDayFilter: string = 'Monday';
 
-  constructor(private authService: AuthService) { }
+  constructor(private firebaseService: FirebaseService, private authService: AuthService) { }
 
   ngOnInit() {
+    const user = this.authService.getUser();
+    if (!user) {
+      console.error('User not logged in');
+      return;
+    }
+
+    this.userId = user['id'];
+
+    // Učitaj sve treninge za ovog korisnika
+    this.firebaseService.getWorkouts(this.userId)
+      .subscribe(data => {
+        this.workouts = data ? Object.entries(data).map(([id, workout]: any) => ({ id, ...workout })) : [];
+      });
   }
 
-
-    addWorkout() {
+  addWorkout() {
     if (!this.workoutName || !this.selectedDay || !this.duration || this.selectedExercises.length === 0) {
       alert('Please fill in all fields and select at least one exercise.');
       return;
@@ -58,14 +73,26 @@ export class WorkoutSchedulePage implements OnInit {
     const newWorkout: Workout = {
       name: this.workoutName,
       day: this.selectedDay,
-      duration: this.duration,
+      duration: this.duration!,
       dateCreated: this.dateCreated,
       exercises: [...this.selectedExercises]
     };
 
-    this.workouts.push(newWorkout);
+    // Čuvanje u Firebase pod ID korisnika
+    this.firebaseService.addWorkout(this.userId, newWorkout)
+      .subscribe({
+        next: (res: any) => {
+          this.workouts.push({ id: res.name, ...newWorkout });
+          this.resetForm();
+        },
+        error: (err) => {
+          console.error(err);
+          alert('Došlo je do greške prilikom čuvanja treninga.');
+        }
+      });
+  }
 
-    // Reset form
+  resetForm() {
     this.workoutName = '';
     this.selectedDay = 'Monday';
     this.duration = null;
@@ -73,13 +100,13 @@ export class WorkoutSchedulePage implements OnInit {
     this.selectedExercises = [];
   }
 
-  // Filter workouts by day
+  // Filter treninga po danu
   getWorkoutsForSelectedDay(): Workout[] {
     return this.workouts.filter(w => w.day === this.selectedDayFilter);
   }
 
+  // Logout
   logout() {
     this.authService.logout();
   }
-
 }

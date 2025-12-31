@@ -21,28 +21,34 @@ export class RegisterPage implements OnInit {
   }
 
   register() {
-    if (!this.email || !this.password || !this.confirmPassword) {
-      alert('Popunite sva polja!');
-      return;
-    }
-
-    if (this.password !== this.confirmPassword) {
-      alert('Lozinka i potvrda lozinke se ne poklapaju!');
-      return;
-    }
-
-    // Poziv AuthService da doda korisnika u Firebase
-    this.authService.register({ email: this.email, password: this.password, name: this.name })
-      .subscribe({
-        next: () => {
-          alert('Uspešno registrovan korisnik!');
-          this.router.navigate(['/login']); // preusmeravanje na login
-        },
-        error: (err) => {
-          console.error(err);
-          alert('Došlo je do greške prilikom registracije!');
-        }
-      });
+  if (!this.name || !this.email || !this.password || !this.confirmPassword) {
+    alert('Popunite sva polja!');
+    return;
   }
+
+  if (this.password !== this.confirmPassword) {
+    alert('Lozinka i potvrda lozinke se ne poklapaju!');
+    return;
+  }
+
+  const user = {
+    id: Date.now().toString(),
+    name: this.name,
+    email: this.email.trim().toLowerCase(),
+    password: this.password
+  };
+
+  this.authService.register(user).subscribe({
+    next: () => {
+      alert('Uspešno registrovan korisnik!');
+      this.router.navigate(['/login']);
+    },
+    error: (err) => {
+      console.error(err);
+      alert('Došlo je do greške prilikom registracije!');
+    }
+  });
+}
+
 
 }

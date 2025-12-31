@@ -24,15 +24,21 @@ export class FirebaseService {
   }
 
   // ---------- TRENING ----------
-  // Dodavanje treninga
-  addWorkout(workout: any): Observable<any> {
-    return this.http.post(`${this.baseUrl}/workouts.json`, workout);
-  }
+  // Dodavanje treninga za određenog korisnika
+addWorkout(userId: string, workout: any): Observable<{ name: string }> {
+  return this.http.post<{ name: string }>(
+    `${this.baseUrl}/workouts/${userId}.json`,
+    workout
+  );
+}
 
-  // Dohvatanje svih treninga
-  getWorkouts(): Observable<any> {
-    return this.http.get(`${this.baseUrl}/workouts.json`);
-  }
+// Dohvatanje svih treninga određenog korisnika
+getWorkouts(userId: string): Observable<{ [key: string]: any }> {
+  return this.http.get<{ [key: string]: any }>(
+    `${this.baseUrl}/workouts/${userId}.json`
+  );
+}
+
 
   // ---------- ISHRANA / OBROCI ----------
   // Dodavanje obroka

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { FirebaseService } from './firebase.service';
 import { Observable, map } from 'rxjs';
+import { tap } from 'rxjs/operators';
 
 export interface User {
   email: string;
@@ -17,9 +18,14 @@ export class AuthService {
   constructor(private router: Router, private firebaseService: FirebaseService) {}
 
   // Registracija korisnika
-  register(user: User): Observable<any> {
-    return this.firebaseService.addUser(user); // vraća Observable<any>
-  }
+  register(user: any) {
+  return this.firebaseService.addUser(user).pipe(
+    tap(res => {
+      // res.name je Firebase generisani ID korisnika
+      localStorage.setItem('user', JSON.stringify({ ...user, id: res.name }));
+    })
+  );
+}
 
   // Login
   login(email: string, password: string): Observable<boolean> {
@@ -53,4 +59,12 @@ export class AuthService {
     const user = localStorage.getItem('user');
     return user ? JSON.parse(user) : null;
   }
+
+
+  getUserId(): string | null {
+  const user = this.getUser();
+  return user ? user['id'] : null;
+}
+
+
 }
