@@ -1,0 +1,64 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Edit Workout</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="cancel()">Cancel</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <ion-item>
+    <ion-label position="stacked">Workout Name</ion-label>
+    <ion-input [(ngModel)]="workout.name"></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label>Day</ion-label>
+    <ion-select [(ngModel)]="workout.day">
+      <ion-select-option *ngFor="let d of daysOfWeek" [value]="d">
+    {{ d }}
+  </ion-select-option>
+    </ion-select>
+  </ion-item>
+
+  <ion-item>
+    <ion-label position="stacked">Duration (min)</ion-label>
+    <ion-input type="number" [(ngModel)]="workout.duration"></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label position="stacked">Date</ion-label>
+    <input type="date" [(ngModel)]="workout.dateCreated" class="ion-input" />
+  </ion-item>
+
+  <!-- Exercises -->
+<ion-item>
+  <ion-label>Exercises</ion-label>
+  <ion-select
+    [(ngModel)]="workout.exercises"
+    multiple="true"
+    okText="Save"
+    cancelText="Cancel">
+
+    <ion-select-option
+      *ngFor="let ex of allExercises"
+      [value]="ex">
+      {{ ex.name }}
+    </ion-select-option>
+
+  </ion-select>
+</ion-item>
+
+
+
+  <ion-button
+    expand="block"
+    color="primary"
+    class="ion-margin-top"
+    (click)="updateWorkout()">
+    Update Workout
+  </ion-button>
+
+</ion-content>

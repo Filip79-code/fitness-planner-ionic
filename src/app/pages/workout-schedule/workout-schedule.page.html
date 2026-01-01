@@ -16,7 +16,9 @@
   <!-- Form for creating workout -->
   <ion-card>
     <ion-card-header>
-      <ion-card-title>Create Workout</ion-card-title>
+      <ion-card-title>
+        {{ isEditing ? 'Edit Workout' : 'Create Workout' }}
+      </ion-card-title>
     </ion-card-header>
 
     <ion-card-content>
@@ -63,7 +65,24 @@
       </ion-item>
 
       <!-- Add button -->
-      <ion-button expand="block" color="secondary" class="ion-margin-top" (click)="addWorkout()">Add Workout</ion-button>
+      <ion-button
+  expand="block"
+  color="secondary"
+  class="ion-margin-top"
+  (click)="isEditing ? updateWorkout() : addWorkout()">
+  {{ isEditing ? 'Update Workout' : 'Add Workout' }}
+</ion-button>
+
+<!-- Cancel edit -->
+<ion-button
+  *ngIf="isEditing"
+  expand="block"
+  fill="outline"
+  color="medium"
+  class="ion-margin-top"
+  (click)="cancelEdit()">
+  Cancel Edit
+</ion-button>
 
     </ion-card-content>
   </ion-card>
@@ -90,13 +109,39 @@
             <strong>{{ workout.name }}</strong> – {{ workout.duration }} min
           </ion-label>
 
-        <ion-button
-          fill="clear"
-          color="danger"
-          slot="end"
-          (click)="deleteWorkout(workout)">
-          <ion-icon name="trash-outline"></ion-icon>
-        </ion-button>
+
+        <ion-buttons slot="end">
+
+    <!-- EDIT -->
+
+    <ion-button
+  fill="clear"
+  color="primary"
+  slot="end"
+  (click)="openEditWorkout(workout)">
+  <ion-icon name="create-outline"></ion-icon>
+</ion-button>
+
+
+
+
+
+    <!-- <ion-button
+      fill="clear"
+      color="primary"
+      (click)="editWorkout(workout)">
+      <ion-icon name="create-outline"></ion-icon>
+    </ion-button> -->
+
+    <!-- DELETE -->
+    <ion-button
+      fill="clear"
+      color="danger"
+      (click)="deleteWorkout(workout)">
+      <ion-icon name="trash-outline"></ion-icon>
+    </ion-button>
+
+  </ion-buttons>
 </ion-item-divider>
 
 

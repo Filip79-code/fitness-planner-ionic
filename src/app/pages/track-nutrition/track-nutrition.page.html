@@ -97,14 +97,23 @@
     </p>
   </ion-label>
 
+  <!-- EDIT -->
+  <ion-button
+    fill="clear"
+    color="primary"
+    (click)="openEditMeal(meal)">
+    <ion-icon name="create-outline"></ion-icon>
+  </ion-button>
+
+  <!-- DELETE -->
   <ion-button
     fill="clear"
     color="danger"
-    slot="end"
     (click)="deleteMeal(meal)">
     <ion-icon name="trash-outline"></ion-icon>
   </ion-button>
 </ion-item>
+
 
       </ion-list>
 

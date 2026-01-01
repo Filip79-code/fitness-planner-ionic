@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { FirebaseService } from '../../services/firebase.service';
+import { ModalController } from '@ionic/angular';
+import { EditMealPage } from '../edit-meal/edit-meal.page';
 
 
 interface Meal {
@@ -34,7 +36,7 @@ export class TrackNutritionPage implements OnInit {
 
   selectedDate: string = '';
 
-  constructor(private authService: AuthService, private firebaseService: FirebaseService) { }
+  constructor(private authService: AuthService, private firebaseService: FirebaseService, private modalCtrl: ModalController) { }
 
   ngOnInit() {
 
@@ -102,6 +104,32 @@ export class TrackNutritionPage implements OnInit {
       }
     });
 }
+
+
+
+async openEditMeal(meal: Meal) {
+  const modal = await this.modalCtrl.create({
+    component: EditMealPage,
+    componentProps: {
+      meal: { ...meal } // kopija
+    },
+    breakpoints: [0, 0.9],
+    initialBreakpoint: 0.9
+  });
+
+  modal.onDidDismiss().then(result => {
+    if (result.data) {
+      this.firebaseService.getMeals(this.userId).subscribe(data => {
+        this.meals = data
+          ? Object.entries(data).map(([id, m]: any) => ({ id, ...m }))
+          : [];
+      });
+    }
+  });
+
+  await modal.present();
+}
+
 
 
   getMealsForSelectedDate(): Meal[] {

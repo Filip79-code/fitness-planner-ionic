@@ -53,6 +53,16 @@ deleteWorkout(userId: string, workoutId: string): Observable<void> {
 }
 
 
+// Update treninga
+updateWorkout(userId: string, workoutId: string, workout: any): Observable<any> {
+  return this.http.patch(
+    `${this.baseUrl}/workouts/${userId}/${workoutId}.json`,
+    workout
+  );
+}
+
+
+
 
   // ---------- ISHRANA / OBROCI ----------
   // Dodavanje obroka
@@ -92,6 +102,14 @@ deleteMeal(userId: string, mealId: string): Observable<void> {
     tap(() => {
       this.mealsChanged.next();
     })
+  );
+}
+
+// Update obroka
+updateMeal(userId: string, mealId: string, meal: any): Observable<void> {
+  return this.http.patch<void>(
+    `${this.baseUrl}/meals/${userId}/${mealId}.json`,
+    meal
   );
 }
 

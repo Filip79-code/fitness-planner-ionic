@@ -35,6 +35,14 @@ const routes: Routes = [
     loadChildren: () => import('./pages/track-nutrition/track-nutrition.module').then( m => m.TrackNutritionPageModule),
     canActivate: [AuthGuard]
   },
+  {
+    path: 'edit-workout',
+    loadChildren: () => import('./pages/edit-workout/edit-workout.module').then( m => m.EditWorkoutPageModule)
+  },
+  {
+    path: 'edit-meal',
+    loadChildren: () => import('./pages/edit-meal/edit-meal.module').then( m => m.EditMealPageModule)
+  },
   
 ];
 

@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { FirebaseService } from '../../services/firebase.service';
+import { ModalController } from '@ionic/angular';
+import { EditWorkoutPage } from '../edit-workout/edit-workout.page';
 
 
 interface Exercise {
@@ -25,6 +27,9 @@ interface Workout {
 })
 export class WorkoutSchedulePage implements OnInit {
 
+  isEditing: boolean = false;
+  editingWorkoutId?: string;
+
   userId!: string;
 
   workouts: Workout[] = [];
@@ -46,7 +51,7 @@ export class WorkoutSchedulePage implements OnInit {
   daysOfWeek: string[] = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
   selectedDayFilter: string = 'Monday';
 
-  constructor(private firebaseService: FirebaseService, private authService: AuthService) { }
+  constructor(private firebaseService: FirebaseService, private authService: AuthService, private modalCtrl: ModalController) { }
 
   ngOnInit() {
     const user = this.authService.getUser();
@@ -129,6 +134,90 @@ export class WorkoutSchedulePage implements OnInit {
       }
     });
 }
+
+
+editWorkout(workout: Workout) {
+  this.isEditing = true;
+  this.editingWorkoutId = workout.id!;
+
+  this.workoutName = workout.name;
+  this.selectedDay = workout.day;
+  this.duration = workout.duration;
+  this.dateCreated = workout.dateCreated;
+  this.selectedExercises = [...workout.exercises];
+}
+
+
+updateWorkout() {
+  if (!this.editingWorkoutId) return;
+
+  const updatedWorkout: Workout = {
+    name: this.workoutName,
+    day: this.selectedDay,
+    duration: this.duration!,
+    dateCreated: this.dateCreated,
+    exercises: [...this.selectedExercises]
+  };
+
+  this.firebaseService
+    .updateWorkout(this.userId, this.editingWorkoutId, updatedWorkout)
+    .subscribe({
+      next: () => {
+        const index = this.workouts.findIndex(w => w.id === this.editingWorkoutId);
+        if (index !== -1) {
+          this.workouts[index] = {
+            id: this.editingWorkoutId,
+            ...updatedWorkout
+          };
+        }
+
+        this.cancelEdit();
+      },
+      error: err => {
+        console.error(err);
+        alert('Error updating workout');
+      }
+    });
+}
+
+
+cancelEdit() {
+  this.isEditing = false;
+  this.editingWorkoutId = undefined;
+  this.resetForm();
+}
+
+
+async openEditWorkout(workout: Workout) {
+  const modal = await this.modalCtrl.create({
+    component: EditWorkoutPage,
+    componentProps: {
+      userId: this.userId,
+      workoutId: workout.id,
+      workout: { ...workout } // klon objekta
+    },
+    breakpoints: [0, 0.9],
+    initialBreakpoint: 0.9
+  });
+
+  modal.onDidDismiss().then(res => {
+    if (res.data) {
+      this.reloadWorkouts();
+    }
+  });
+
+  await modal.present();
+}
+
+
+reloadWorkouts() {
+  this.firebaseService.getWorkouts(this.userId).subscribe(data => {
+    this.workouts = data
+      ? Object.entries(data).map(([id, w]: any) => ({ id, ...w }))
+      : [];
+  });
+}
+
 
 
   // Logout

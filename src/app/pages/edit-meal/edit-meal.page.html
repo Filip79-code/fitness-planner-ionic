@@ -1,0 +1,46 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Edit Meal</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="cancel()">Cancel</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <ion-item>
+    <ion-label position="stacked">Meal Name</ion-label>
+    <ion-input [(ngModel)]="meal.name"></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label position="stacked">Calories</ion-label>
+    <ion-input type="number" [(ngModel)]="meal.calories"></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label position="stacked">Protein (g)</ion-label>
+    <ion-input type="number" [(ngModel)]="meal.protein"></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label position="stacked">Carbs (g)</ion-label>
+    <ion-input type="number" [(ngModel)]="meal.carbs"></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label position="stacked">Fats (g)</ion-label>
+    <ion-input type="number" [(ngModel)]="meal.fats"></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label position="stacked">Date</ion-label>
+    <input type="date" [(ngModel)]="meal.date" class="ion-input" />
+  </ion-item>
+
+  <ion-button expand="block" color="primary" (click)="updateMeal()">
+    Update Meal
+  </ion-button>
+
+</ion-content>
