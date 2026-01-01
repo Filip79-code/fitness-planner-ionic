@@ -11,8 +11,13 @@ import { FirebaseService } from '../../services/firebase.service';
 export class DashboardPage {
 
   // selectedDate: string = new Date().toISOString();
-  today: string = '';
-  
+  get today(): string {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = (now.getMonth() + 1).toString().padStart(2, '0'); // meseci su 0-indexirani
+  const day = now.getDate().toString().padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
 
   meals: any[] = [];
 
@@ -25,8 +30,12 @@ export class DashboardPage {
   constructor(private authService: AuthService, private firebaseService: FirebaseService) { }
 
   ionViewWillEnter() {
-    this.today = new Date().toISOString().split('T')[0];
-  this.loadMealsForToday();
+    this.loadMeals();
+
+  // automatski refresh kada se doda novi obrok
+  this.firebaseService.mealsChanged$.subscribe(() => {
+    this.loadMeals();
+  });
   }
 
   // onDateChange(event: any) {
@@ -34,7 +43,7 @@ export class DashboardPage {
   //   this.loadMealsForDate(this.selectedDate);
   // }
 
-  loadMealsForToday() {
+  loadMeals() {
   const userId = this.authService.getUserId();
   if (!userId) return;
 
@@ -43,9 +52,11 @@ export class DashboardPage {
       ? Object.entries(data).map(([id, meal]: any) => ({ id, ...meal }))
       : [];
 
+    // filtriramo samo obroke za danas
     this.meals = allMeals.filter(meal => meal.date === this.today);
   });
 }
+
 
 
 
