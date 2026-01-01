@@ -84,6 +84,26 @@ export class TrackNutritionPage implements OnInit {
     });
   }
 
+  deleteMeal(meal: Meal) {
+  if (!meal.id) return;
+
+  const confirmDelete = confirm(`Delete meal "${meal.name}"?`);
+  if (!confirmDelete) return;
+
+  this.firebaseService.deleteMeal(this.userId, meal.id)
+    .subscribe({
+      next: () => {
+        // ukloni odmah iz UI
+        this.meals = this.meals.filter(m => m.id !== meal.id);
+      },
+      error: (err) => {
+        console.error(err);
+        alert('Error deleting meal.');
+      }
+    });
+}
+
+
   getMealsForSelectedDate(): Meal[] {
     return this.meals.filter(m => m.date === this.selectedDate);
   }

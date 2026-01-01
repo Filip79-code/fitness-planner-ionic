@@ -105,6 +105,32 @@ export class WorkoutSchedulePage implements OnInit {
     return this.workouts.filter(w => w.day === this.selectedDayFilter);
   }
 
+
+  deleteWorkout(workout: Workout) {
+  if (!workout.id) {
+    return;
+  }
+
+  const confirmDelete = confirm(`Delete workout "${workout.name}"?`);
+  if (!confirmDelete) {
+    return;
+  }
+
+  this.firebaseService
+    .deleteWorkout(this.userId, workout.id)
+    .subscribe({
+      next: () => {
+        // ukloni lokalno bez reload-a
+        this.workouts = this.workouts.filter(w => w.id !== workout.id);
+      },
+      error: (err) => {
+        console.error(err);
+        alert('Error deleting workout.');
+      }
+    });
+}
+
+
   // Logout
   logout() {
     this.authService.logout();

@@ -45,6 +45,15 @@ getWorkouts(userId: string): Observable<{ [key: string]: any }> {
 }
 
 
+// Brisanje treninga
+deleteWorkout(userId: string, workoutId: string): Observable<void> {
+  return this.http.delete<void>(
+    `${this.baseUrl}/workouts/${userId}/${workoutId}.json`
+  );
+}
+
+
+
   // ---------- ISHRANA / OBROCI ----------
   // Dodavanje obroka
 //   addMeal(userId: string, meal: any): Observable<{ name: string }> {
@@ -74,4 +83,17 @@ getWorkouts(userId: string): Observable<{ [key: string]: any }> {
     `${this.baseUrl}/meals/${userId}.json`
   );
 }
+
+
+deleteMeal(userId: string, mealId: string): Observable<void> {
+  return this.http.delete<void>(
+    `${this.baseUrl}/meals/${userId}/${mealId}.json`
+  ).pipe(
+    tap(() => {
+      this.mealsChanged.next();
+    })
+  );
+}
+
+
 }

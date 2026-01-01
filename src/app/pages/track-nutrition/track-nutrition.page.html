@@ -87,16 +87,25 @@
 
       <ion-list *ngIf="getMealsForSelectedDate().length > 0">
         <ion-item *ngFor="let meal of getMealsForSelectedDate()">
-          <ion-label>
-            <h2>{{ meal.name }}</h2>
-            <p>
-              {{ meal.calories }} kcal |
-              P: {{ meal.protein }}g |
-              C: {{ meal.carbs }}g |
-              F: {{ meal.fats }}g
-            </p>
-          </ion-label>
-        </ion-item>
+  <ion-label>
+    <h2>{{ meal.name }}</h2>
+    <p>
+      {{ meal.calories }} kcal |
+      P: {{ meal.protein }}g |
+      C: {{ meal.carbs }}g |
+      F: {{ meal.fats }}g
+    </p>
+  </ion-label>
+
+  <ion-button
+    fill="clear"
+    color="danger"
+    slot="end"
+    (click)="deleteMeal(meal)">
+    <ion-icon name="trash-outline"></ion-icon>
+  </ion-button>
+</ion-item>
+
       </ion-list>
 
       <p *ngIf="getMealsForSelectedDate().length === 0" class="ion-padding">

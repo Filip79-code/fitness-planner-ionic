@@ -86,8 +86,19 @@
       <!-- Workout list -->
       <ion-list *ngFor="let workout of getWorkoutsForSelectedDay()">
         <ion-item-divider color="light">
-          <ion-label>{{ workout.name }} - {{ workout.duration }} min</ion-label>
-        </ion-item-divider>
+          <ion-label>
+            <strong>{{ workout.name }}</strong> – {{ workout.duration }} min
+          </ion-label>
+
+        <ion-button
+          fill="clear"
+          color="danger"
+          slot="end"
+          (click)="deleteWorkout(workout)">
+          <ion-icon name="trash-outline"></ion-icon>
+        </ion-button>
+</ion-item-divider>
+
 
         <ion-item *ngFor="let ex of workout.exercises">
           <ion-label>{{ ex.name }}</ion-label>
