@@ -1,11 +1,16 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
+import { tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FirebaseService {
+
+  private mealsChanged = new BehaviorSubject<void>(undefined);
+mealsChanged$ = this.mealsChanged.asObservable();
 
   
   private baseUrl = 'https://fitness-planner-9ee6b-default-rtdb.europe-west1.firebasedatabase.app';
@@ -42,12 +47,26 @@ getWorkouts(userId: string): Observable<{ [key: string]: any }> {
 
   // ---------- ISHRANA / OBROCI ----------
   // Dodavanje obroka
+//   addMeal(userId: string, meal: any): Observable<{ name: string }> {
+//   return this.http.post<{ name: string }>(
+//     `${this.baseUrl}/meals/${userId}.json`,
+//     meal
+//   );
+// }
+
   addMeal(userId: string, meal: any): Observable<{ name: string }> {
   return this.http.post<{ name: string }>(
     `${this.baseUrl}/meals/${userId}.json`,
     meal
+  ).pipe(
+    tap(() => {
+      this.mealsChanged.next();
+    })
   );
 }
+
+
+
 
   // Dohvatanje svih obroka
   getMeals(userId: string): Observable<{ [key: string]: any }> {

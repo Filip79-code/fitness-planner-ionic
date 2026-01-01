@@ -8,10 +8,10 @@ import { FirebaseService } from '../../services/firebase.service';
   styleUrls: ['./dashboard.page.scss'],
   standalone: false
 })
-export class DashboardPage implements OnInit {
+export class DashboardPage {
 
-  selectedDate: string = new Date().toISOString();
-
+  // selectedDate: string = new Date().toISOString();
+  today: string = '';
   
 
   meals: any[] = [];
@@ -24,15 +24,30 @@ export class DashboardPage implements OnInit {
 
   constructor(private authService: AuthService, private firebaseService: FirebaseService) { }
 
-  ngOnInit() {
-    this.userId = this.authService.getUserId()!;
-    this.loadMealsForDate(this.selectedDate);
+  ionViewWillEnter() {
+    this.today = new Date().toISOString().split('T')[0];
+  this.loadMealsForToday();
   }
 
-  onDateChange(event: any) {
-    this.selectedDate = event.detail.value;
-    this.loadMealsForDate(this.selectedDate);
-  }
+  // onDateChange(event: any) {
+  //   this.selectedDate = event.detail.value;
+  //   this.loadMealsForDate(this.selectedDate);
+  // }
+
+  loadMealsForToday() {
+  const userId = this.authService.getUserId();
+  if (!userId) return;
+
+  this.firebaseService.getMeals(userId).subscribe(data => {
+    const allMeals = data
+      ? Object.entries(data).map(([id, meal]: any) => ({ id, ...meal }))
+      : [];
+
+    this.meals = allMeals.filter(meal => meal.date === this.today);
+  });
+}
+
+
 
   loadMealsForDate(date: string) {
     const formattedDate = date.split('T')[0];

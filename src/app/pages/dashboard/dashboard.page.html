@@ -47,7 +47,7 @@
   </ion-grid>
 
   <!-- Date picker -->
-  <ion-item lines="none" class="ion-margin-top">
+  <!-- <ion-item lines="none" class="ion-margin-top">
     <ion-label position="stacked">Selected date</ion-label>
     <ion-datetime
   presentation="date"
@@ -55,12 +55,12 @@
   (ionChange)="onDateChange($event)">
 </ion-datetime>
 
-  </ion-item>
+  </ion-item> -->
 
   <!-- Meals -->
   <ion-card class="ion-margin-top">
     <ion-card-header>
-      <ion-card-title>Meals for selected day</ion-card-title>
+      <ion-card-title>Meals for today</ion-card-title>
     </ion-card-header>
 
     <ion-card-content *ngIf="meals.length > 0">
