@@ -68,6 +68,44 @@
     </ion-card-content>
   </ion-card>
 
+
+  <ion-card>
+  <ion-card-header>
+    <ion-card-title>Food lookup</ion-card-title>
+  </ion-card-header>
+
+  <ion-card-content>
+    <ion-item>
+      <ion-input
+        placeholder="Search food (e.g. banana, chicken)"
+        [(ngModel)]="foodQuery">
+      </ion-input>
+    </ion-item>
+
+    <ion-button
+      expand="block"
+      class="ion-margin-top"
+      (click)="searchFood()">
+      Search
+    </ion-button>
+
+    <ion-list *ngIf="foodResults.length > 0">
+      <ion-item *ngFor="let food of foodResults">
+        <ion-label>
+          <h2>{{ food.name }}</h2>
+          <p>
+            {{ food.calories }} kcal |
+            P: {{ food.protein }}g |
+            C: {{ food.carbs }}g |
+            F: {{ food.fats }}g
+          </p>
+        </ion-label>
+      </ion-item>
+    </ion-list>
+  </ion-card-content>
+</ion-card>
+
+
   <!-- View meals by date -->
   <ion-card class="ion-margin-top">
     <ion-card-header>

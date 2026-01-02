@@ -113,5 +113,21 @@ updateMeal(userId: string, mealId: string, meal: any): Observable<void> {
   );
 }
 
+searchFood(query: string) {
+  return this.http.get<any>(
+    `https://world.openfoodfacts.org/cgi/search.pl`,
+    {
+      params: {
+        search_terms: query,
+        search_simple: '1',
+        action: 'process',
+        json: '1',
+        page_size: '5'
+      }
+    }
+  );
+}
+
+
 
 }

@@ -15,6 +15,15 @@ interface Meal {
   date: string;
 }
 
+interface FoodResult {
+  name: string;
+  calories: number;
+  protein: number;
+  carbs: number;
+  fats: number;
+}
+
+
 @Component({
   selector: 'app-track-nutrition',
   templateUrl: './track-nutrition.page.html',
@@ -35,6 +44,9 @@ export class TrackNutritionPage implements OnInit {
   meals: Meal[] = [];
 
   selectedDate: string = '';
+
+  foodQuery = '';
+  foodResults: FoodResult[] = [];
 
   constructor(private authService: AuthService, private firebaseService: FirebaseService, private modalCtrl: ModalController) { }
 
@@ -129,6 +141,53 @@ async openEditMeal(meal: Meal) {
 
   await modal.present();
 }
+
+
+
+searchFood() {
+  if (!this.foodQuery) return;
+
+  this.firebaseService.searchFood(this.foodQuery)
+    .subscribe(res => {
+
+      const products = res.products || [];
+
+      // 1️⃣ samo proizvodi koji imaju PRAVE nutritivne vrednosti
+      const validProducts = products.filter((p: any) =>
+        p.nutriments &&
+        p.nutriments['energy-kcal_100g'] &&
+        p.nutriments['proteins_100g']
+      );
+
+      // 2️⃣ ime mora da sadrži ono što je korisnik uneo
+      const cleanProducts = validProducts.filter((p: any) =>
+        p.product_name &&
+        p.product_name.toLowerCase().includes(this.foodQuery.toLowerCase())
+      );
+
+      // 3️⃣ mapiranje u tvoj FoodResult
+      this.foodResults = cleanProducts.map((p: any) => ({
+        name: p.product_name,
+        calories: Math.round(p.nutriments['energy-kcal_100g']),
+        protein: Math.round(p.nutriments['proteins_100g']),
+        carbs: Math.round(p.nutriments['carbohydrates_100g'] || 0),
+        fats: Math.round(p.nutriments['fat_100g'] || 0),
+      }));
+
+      // 4️⃣ ako nema ničega → fallback
+      if (this.foodResults.length === 0) {
+        alert('No reliable nutrition data found. Try another food.');
+      }
+
+    });
+}
+
+
+
+
+
+
+
 
 
 
