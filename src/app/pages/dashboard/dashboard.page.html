@@ -57,6 +57,49 @@
 
   </ion-item> -->
 
+  <!-- Protein Calculator -->
+<ion-card class="ion-margin-top">
+  <ion-card-header>
+    <ion-card-title>Protein Calculator 🥩</ion-card-title>
+  </ion-card-header>
+
+  <ion-card-content>
+
+    <ion-item>
+      <ion-label position="stacked">Your weight (kg)</ion-label>
+      <ion-input
+        type="number"
+        [(ngModel)]="weight"
+        (ionInput)="calculateProtein()"
+        placeholder="e.g. 80">
+      </ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">Protein per kg</ion-label>
+      <ion-select
+        [(ngModel)]="proteinPerKg"
+        (ionChange)="calculateProtein()">
+        <ion-select-option value="1.6">1.6 g / kg (light activity)</ion-select-option>
+        <ion-select-option value="1.8">1.8 g / kg (recommended)</ion-select-option>
+        <ion-select-option value="2.0">2.0 g / kg (muscle gain)</ion-select-option>
+        <ion-select-option value="2.2">2.2 g / kg (intense training)</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item *ngIf="dailyProtein !== null">
+      <ion-label>
+        <strong>Daily protein goal</strong>
+      </ion-label>
+      <ion-note slot="end" color="success">
+        {{ dailyProtein }} g
+      </ion-note>
+    </ion-item>
+
+  </ion-card-content>
+</ion-card>
+
+
   <!-- Meals -->
   <ion-card class="ion-margin-top">
     <ion-card-header>

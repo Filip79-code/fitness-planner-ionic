@@ -23,6 +23,11 @@ export class DashboardPage {
 
   userId!: string;
 
+  weight!: number;
+  proteinPerKg: number = 1.8;
+  dailyProtein: number | null = null;
+
+
   get totalCalories(): number {
     return this.meals.reduce((sum, meal) => sum + meal.calories, 0);
   }
@@ -74,6 +79,17 @@ export class DashboardPage {
       );
     });
   }
+
+
+  calculateProtein() {
+  if (!this.weight || this.weight <= 0) {
+    this.dailyProtein = null;
+    return;
+  }
+
+  this.dailyProtein = Math.round(this.weight * this.proteinPerKg);
+}
+
 
   logout() {
     this.authService.logout();
