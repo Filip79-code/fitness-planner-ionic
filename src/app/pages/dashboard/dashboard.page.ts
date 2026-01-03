@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { FirebaseService } from '../../services/firebase.service';
+import { ModalController } from '@ionic/angular';
+import { DailyGoalsPage } from '../daily-goals/daily-goals.page';
+
 
 @Component({
   selector: 'app-dashboard',
@@ -22,25 +25,56 @@ export class DashboardPage {
   meals: any[] = [];
 
   userId!: string;
+  // userId: string | null = null;
 
   weight!: number;
   proteinPerKg: number = 1.8;
   dailyProtein: number | null = null;
+
+  goals = {
+  calories: 0,
+  protein: 0,
+  // water: 0
+};
+
 
 
   get totalCalories(): number {
     return this.meals.reduce((sum, meal) => sum + meal.calories, 0);
   }
 
-  constructor(private authService: AuthService, private firebaseService: FirebaseService) { }
+  constructor(private authService: AuthService, private firebaseService: FirebaseService, private modalCtrl: ModalController) { }
+
+  cancel() {
+  this.modalCtrl.dismiss();
+}
 
   ionViewWillEnter() {
+
+    this.userId = this.authService.getUserId()!;
+  if (!this.userId) return;
+  //   this.userId = this.authService.getUserId(); // OBAVEZNO
+  // if (!this.userId) return;
     this.loadMeals();
 
   // automatski refresh kada se doda novi obrok
   this.firebaseService.mealsChanged$.subscribe(() => {
     this.loadMeals();
   });
+
+  // učitaj ciljeve odmah
+  this.loadGoals();
+
+
+
+
+  this.firebaseService.getGoals(this.userId)
+  .subscribe((res: any) => {
+    if (res) {
+      this.goals = res;
+    }
+  });
+
   }
 
   // onDateChange(event: any) {
@@ -88,6 +122,65 @@ export class DashboardPage {
   }
 
   this.dailyProtein = Math.round(this.weight * this.proteinPerKg);
+}
+
+
+get totalProtein(): number {
+  return this.meals.reduce(
+    (sum, meal) => sum + (meal.protein || 0),
+    0
+  );
+}
+
+getCaloriesProgress(): number {
+  if (!this.goals.calories) return 0;
+
+  return Math.min(
+    (this.totalCalories / this.goals.calories) * 100,
+    100
+  );
+}
+
+getProteinProgress(): number {
+  if (!this.goals.protein) return 0;
+
+  return Math.min(
+    (this.totalProtein / this.goals.protein) * 100,
+    100
+  );
+}
+
+
+async openDailyGoalModal() {
+  const modal = await this.modalCtrl.create({
+    component: DailyGoalsPage,
+
+    // 🔥 OVO SPREČAVA FULLSCREEN
+    breakpoints: [0, 0.9],
+    initialBreakpoint: 0.9
+  });
+
+  modal.onDidDismiss().then(res => {
+    if (res.data) {
+      this.firebaseService.getGoals(this.userId).subscribe((g: any) => {
+        if (g) this.goals = g;
+      });
+    }
+  });
+
+  await modal.present();
+}
+
+loadGoals() {
+  const userId = this.authService.getUserId();
+  if (!userId) return;
+
+  this.firebaseService.getGoals(userId)
+    .subscribe(res => {
+      if (res) {
+        this.goals = res;
+      }
+    });
 }
 
 

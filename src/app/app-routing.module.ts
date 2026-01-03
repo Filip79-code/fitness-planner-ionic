@@ -43,6 +43,10 @@ const routes: Routes = [
     path: 'edit-meal',
     loadChildren: () => import('./pages/edit-meal/edit-meal.module').then( m => m.EditMealPageModule)
   },
+  {
+    path: 'daily-goals',
+    loadChildren: () => import('./pages/daily-goals/daily-goals.module').then( m => m.DailyGoalsPageModule)
+  },
   
 ];
 

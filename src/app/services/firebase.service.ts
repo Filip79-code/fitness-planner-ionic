@@ -129,5 +129,25 @@ searchFood(query: string) {
 }
 
 
+// getGoals(userId: string) {
+//   return this.http.get(
+//     `${this.baseUrl}/users/${userId}/goals.json`
+//   );
+// }
+
+getGoals(userId: string): Observable<{ calories: number; protein: number }> {
+  return this.http.get<{ calories: number; protein: number }>(
+    `${this.baseUrl}/goals/${userId}.json`
+  );
+}
+
+
+saveGoals(userId: string, goals: { calories: number; protein: number }): Observable<{ calories: number; protein: number }> {
+  return this.http.put<{ calories: number; protein: number }>(
+    `${this.baseUrl}/goals/${userId}.json`,
+    goals
+  );
+}
+
 
 }
