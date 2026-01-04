@@ -57,7 +57,7 @@ Aplikacija omogućava korisnicima da:
 
 ### 1️⃣ Kloniranje projekta
 ```bash
-git clone https://github.com/username/fitness-planner.git
+git clone https://github.com/Filip79-code/fitness-planner-ionic.git
 cd fitness-planner
 ```
 
