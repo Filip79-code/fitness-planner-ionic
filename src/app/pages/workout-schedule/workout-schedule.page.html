@@ -57,12 +57,53 @@
 
 
       <!-- Exercises -->
-      <ion-item>
+      <!-- <ion-item>
         <ion-label>Exercises</ion-label>
         <ion-select [(ngModel)]="selectedExercises" multiple="true" okText="Select" cancelText="Cancel">
           <ion-select-option *ngFor="let ex of exercises" [value]="ex">{{ ex.name }}</ion-select-option>
         </ion-select>
+      </ion-item> -->
+
+   <ion-item lines="none">
+        <ion-label>Exercises</ion-label>
+        <ion-button fill="outline" slot="end" (click)="showExerciseSelector = true">
+          Select Exercises
+        </ion-button>
       </ion-item>
+
+      <!-- Exercise Selector Modal -->
+      <div *ngIf="showExerciseSelector" class="exercise-selector">
+        <!-- Categories -->
+        <div *ngIf="!currentCategory">
+          <ion-list>
+            <ion-item button *ngFor="let cat of categories" (click)="selectCategory(cat)">
+              {{ cat }}
+            </ion-item>
+          </ion-list>
+        </div>
+
+        <!-- Exercises for Category -->
+        <div *ngIf="currentCategory">
+          <h3>{{ currentCategory }}</h3>
+          <ion-list>
+            <ion-item *ngFor="let ex of getExercisesForCurrentCategory()">
+              <ion-label>{{ ex.name }}</ion-label>
+              <ion-checkbox slot="end" [checked]="isExerciseSelected(ex)" (ionChange)="toggleExercise(ex)"></ion-checkbox>
+            </ion-item>
+          </ion-list>
+
+          <ion-button expand="block" (click)="cancelSelection()">Cancel</ion-button>
+          <ion-button expand="block" color="primary" (click)="confirmSelection()">Select</ion-button>
+        </div>
+      </div>
+
+<!-- Prikaz izabranih vežbi -->
+  <ion-item *ngIf="selectedExercises.length > 0">
+        <!-- <ion-label>Selected:</ion-label> -->
+        <ion-note slot="end">{{ selectedExerciseNames }}</ion-note>
+      </ion-item>
+
+
 
       <!-- Add button -->
       <ion-button
